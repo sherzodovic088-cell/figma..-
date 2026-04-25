@@ -1,0 +1,2448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Marketplace</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(145deg, #2a2a2a 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ===== HEADER / NAVBAR ===== */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+        }
+
+        nav a {
+            font-size: 15px;
+            font-weight: 500;
+            color: #cccccc;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ffffff;
+        }
+
+        .btn-signup {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 80px 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 60px;
+        }
+
+        .hero-left {
+            flex: 1;
+            max-width: 550px;
+        }
+
+        .hero-left h1 {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 25px;
+            letter-spacing: -1px;
+        }
+
+        .hero-left p {
+            font-size: 17px;
+            line-height: 1.7;
+            color: #b0b0c0;
+            margin-bottom: 35px;
+        }
+
+        .btn-get-started {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: #fff;
+            padding: 16px 40px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-get-started:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.45);
+        }
+
+        .stats {
+            display: flex;
+            gap: 50px;
+            margin-top: 50px;
+        }
+
+        .stat-item {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .stat-label {
+            font-size: 15px;
+            color: #9999aa;
+            margin-top: 4px;
+        }
+
+        .hero-right {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .nft-card {
+            background: #2a2a3a;
+            border-radius: 20px;
+            overflow: hidden;
+            width: 450px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nft-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .nft-card-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .nft-card-info {
+            padding: 20px 24px;
+        }
+
+        .nft-card-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .nft-card-info .creator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #9999aa;
+        }
+
+        .creator-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* ===== FEATURED NFT SECTION ===== */
+        .featured-nft-section {
+            position: relative;
+            padding: 100px 50px;
+            overflow: hidden;
+        }
+
+        .featured-nft-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            z-index: 0;
+        }
+
+        .featured-nft-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+        }
+
+        .featured-nft-image-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .featured-nft-image {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 20px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .featured-nft-content {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .featured-creator {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .featured-creator-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .featured-creator-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .featured-nft-title {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            line-height: 1.1;
+        }
+
+        .btn-see-nft {
+            background: #ffffff;
+            color: #667eea;
+            padding: 16px 40px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .btn-see-nft:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .auction-timer {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 30px 40px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .auction-timer-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .timer-display {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .timer-unit {
+            text-align: center;
+        }
+
+        .timer-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .timer-label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+        }
+
+        .timer-separator {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        /* ===== HOW IT WORKS SECTION ===== */
+        .how-it-works-section {
+            padding: 100px 50px;
+            background: #1a1a2e;
+        }
+
+        .how-it-works-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .how-it-works-header {
+            margin-bottom: 60px;
+        }
+
+        .how-it-works-header h2 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .how-it-works-header p {
+            font-size: 18px;
+            color: #b0b0c0;
+        }
+
+        .how-it-works-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .how-it-works-card {
+            background: #2a2a3a;
+            border-radius: 20px;
+            padding: 50px 36px 40px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .how-it-works-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+
+        .how-it-works-icon {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 40%, #7c3aed, #4c1d95);
+            margin: 0 auto 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: visible;
+        }
+
+        .how-it-works-icon svg {
+            width: 90px;
+            height: 90px;
+            filter: drop-shadow(0 4px 12px rgba(139,92,246,0.5));
+        }
+
+        .how-it-works-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .how-it-works-card p {
+            font-size: 15px;
+            color: #b0b0c0;
+            line-height: 1.7;
+        }
+
+        /* ===== TRENDING COLLECTION SECTION ===== */
+        .trending-section {
+            padding: 80px 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .trending-header {
+            margin-bottom: 50px;
+        }
+
+        .trending-header h2 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .trending-header p {
+            font-size: 16px;
+            color: #b0b0c0;
+        }
+
+        .collections-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .collection-card {
+            background: #2a2a3a;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .collection-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .collection-main-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .collection-thumbnails {
+            display: flex;
+            padding: 16px;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .thumb {
+            width: 70px;
+            height: 70px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid #3a3a4a;
+        }
+
+        .collection-count {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: #fff;
+            width: 70px;
+            height: 70px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .collection-info {
+            padding: 0 20px 20px;
+        }
+
+        .collection-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .collection-creator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #9999aa;
+        }
+
+        .creator-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* ===== TOP CREATORS SECTION ===== */
+        .top-creators-section {
+            padding: 80px 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .top-creators-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .top-creators-header-text h2 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .top-creators-header-text p {
+            font-size: 16px;
+            color: #b0b0c0;
+        }
+
+        .btn-view-rankings {
+            background: transparent;
+            color: #a855f7;
+            padding: 14px 32px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            border: 2px solid #a855f7;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-view-rankings:hover {
+            background: rgba(168, 85, 247, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
+        }
+
+        .creators-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .creator-card {
+            background: #2a2a3a;
+            border-radius: 18px;
+            padding: 24px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .creator-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        .creator-rank {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            width: 28px;
+            height: 28px;
+            background: #3a3a4a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #9999aa;
+        }
+
+        .creator-card:nth-child(1) .creator-rank,
+        .creator-card:nth-child(2) .creator-rank,
+        .creator-card:nth-child(3) .creator-rank {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: #fff;
+        }
+
+        .creator-avatar-circle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            overflow: hidden;
+            border: 3px solid #3a3a4a;
+            transition: border-color 0.3s;
+        }
+
+        .creator-card:hover .creator-avatar-circle {
+            border-color: #a855f7;
+        }
+
+        .creator-avatar-circle svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .creator-name {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .creator-sales {
+            font-size: 13px;
+            color: #9999aa;
+        }
+
+        .creator-sales span {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* ===== BROWSE CATEGORIES SECTION ===== */
+        .categories-section {
+            padding: 80px 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .categories-section .section-title {
+            font-size: 36px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .category-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .category-icon svg {
+            width: 48px;
+            height: 48px;
+            stroke: white;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        .category-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Category gradients */
+        .category-card:nth-child(1) .category-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .category-card:nth-child(2) .category-icon { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .category-card:nth-child(3) .category-icon { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .category-card:nth-child(4) .category-icon { background: linear-gradient(135deg, #fa709a, #fee140); }
+        .category-card:nth-child(5) .category-icon { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+        .category-card:nth-child(6) .category-icon { background: linear-gradient(135deg, #ffecd2, #fcb69f); }
+        .category-card:nth-child(7) .category-icon { background: linear-gradient(135deg, #d299c2, #fef9d7); }
+        .category-card:nth-child(8) .category-icon { background: linear-gradient(135deg, #89f7fe, #66a6ff); }
+
+        /* ===== FLOATING PARTICLES ===== */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(139, 92, 246, 0.3);
+            border-radius: 50%;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 40px 30px;
+            }
+
+            .hero-left {
+                max-width: 100%;
+            }
+
+            .hero-left h1 {
+                font-size: 42px;
+            }
+
+            .stats {
+                justify-content: center;
+            }
+
+            .hero-right {
+                justify-content: center;
+            }
+
+            .nft-card {
+                width: 100%;
+                max-width: 450px;
+            }
+
+            .featured-nft-container {
+                flex-direction: column;
+            }
+
+            .featured-nft-content {
+                max-width: 100%;
+                text-align: center;
+            }
+
+            .featured-creator {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .btn-see-nft {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            header {
+                padding: 15px 25px;
+            }
+
+            nav {
+                gap: 20px;
+            }
+
+            .collections-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .trending-section,
+            .top-creators-section,
+            .categories-section,
+            .featured-nft-section,
+            .how-it-works-section {
+                padding: 60px 30px;
+            }
+
+            .creators-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .creators-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .top-creators-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .featured-nft-title {
+                font-size: 36px;
+            }
+
+            .timer-value {
+                font-size: 36px;
+            }
+        }
+
+        /* ===== NEWSLETTER SECTION ===== */
+        .newsletter-section {
+            padding: 80px 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .newsletter-card {
+            background: #2a2a3a;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+        }
+
+        .newsletter-image-wrap {
+            flex-shrink: 0;
+            width: 340px;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .newsletter-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .newsletter-content {
+            padding: 50px 60px;
+            flex: 1;
+        }
+
+        .newsletter-content h2 {
+            font-size: 38px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        .newsletter-content p {
+            font-size: 16px;
+            color: #b0b0c0;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0;
+            border-radius: 50px;
+            overflow: hidden;
+            border: 1px solid #3a3a4a;
+            max-width: 480px;
+            background: #1e1e2e;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 16px 24px;
+            font-size: 15px;
+            color: #ffffff;
+        }
+
+        .newsletter-form input::placeholder {
+            color: #6666aa;
+        }
+
+        .newsletter-form button {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: #fff;
+            border: none;
+            padding: 16px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+        }
+
+        .newsletter-form button:hover {
+            opacity: 0.9;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: #1a1a2e;
+            padding: 60px 50px 30px;
+            margin-top: 0;
+        }
+
+        .footer-top {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1.5fr;
+            gap: 60px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 18px;
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+            color: #9999aa;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .footer-community-label {
+            font-size: 14px;
+            color: #cccccc;
+            margin-bottom: 14px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 14px;
+        }
+
+        .footer-socials a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .footer-socials a:hover {
+            border-color: #a855f7;
+            background: rgba(168,85,247,0.1);
+        }
+
+        .footer-socials a svg {
+            width: 18px;
+            height: 18px;
+            stroke: #aaaacc;
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke 0.3s;
+        }
+
+        .footer-socials a:hover svg {
+            stroke: #a855f7;
+        }
+
+        .footer-explore h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .footer-explore ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .footer-explore ul li a {
+            font-size: 15px;
+            color: #9999aa;
+            transition: color 0.3s;
+        }
+
+        .footer-explore ul li a:hover {
+            color: #ffffff;
+        }
+
+        .footer-newsletter h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .footer-newsletter p {
+            font-size: 14px;
+            color: #9999aa;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .footer-newsletter-form {
+            display: flex;
+            gap: 0;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid #3a3a4a;
+            background: #2a2a3a;
+        }
+
+        .footer-newsletter-form input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 14px 18px;
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        .footer-newsletter-form input::placeholder {
+            color: #6666aa;
+        }
+
+        .footer-newsletter-form button {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: #fff;
+            border: none;
+            padding: 14px 22px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .footer-newsletter-form button:hover {
+            opacity: 0.9;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 28px;
+            text-align: left;
+        }
+
+        .footer-bottom p {
+            font-size: 14px;
+            color: #666677;
+        }
+
+        /* Newsletter & Footer responsive */
+        @media (max-width: 1024px) {
+            .newsletter-card {
+                flex-direction: column;
+            }
+            .newsletter-image-wrap {
+                width: 100%;
+                height: 260px;
+            }
+            .newsletter-content {
+                padding: 40px;
+            }
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-top {
+                grid-template-columns: 1fr;
+                gap: 36px;
+            }
+            .newsletter-section {
+                padding: 60px 25px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .hero-left h1 {
+                font-size: 32px;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .btn-get-started,
+            .btn-signup {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .collections-grid,
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trending-header h2,
+            .top-creators-header-text h2,
+            .categories-section .section-title,
+            .how-it-works-header h2 {
+                font-size: 28px;
+            }
+
+            .creators-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+
+            .creator-card {
+                padding: 18px;
+            }
+
+            .creator-avatar-circle {
+                width: 70px;
+                height: 70px;
+            }
+
+            .featured-nft-title {
+                font-size: 28px;
+            }
+
+            .timer-value {
+                font-size: 28px;
+            }
+
+            .timer-separator {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- DECORATIVE PARTICLES -->
+    <div class="particles" id="particles"></div>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="logo">
+            <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+                <rect x="4" y="4" width="24" height="24" rx="6" stroke="#a855f7" stroke-width="2"/>
+                <circle cx="16" cy="14" r="4" stroke="#a855f7" stroke-width="2"/>
+                <path d="M10 26 C10 22 12 18 16 18 C20 18 22 22 22 26" stroke="#a855f7" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span class="logo-text">NFT Marketplace</span>
+        </div>
+        <nav>
+            <a href="#">Marketplace</a>
+            <a href="#">Rankings</a>
+            <a href="#">Connect a wallet</a>
+            <button class="btn-signup">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 3C5.2 3 3 5.2 3 8C3 10.8 5.2 13 8 13C10.8 13 13 10.8 13 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M13 3L13 6L10 6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Sign Up
+            </button>
+        </nav>
+    </header>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero">
+
+        <!-- LEFT CONTENT -->
+        <div class="hero-left">
+            <h1>Discover Digital Art & Collect NFTs</h1>
+            <p>NFT Marketplace UI Created With Anima For Figma. Collect, Buy And Sell Art From More Than 20k NFT Artists.</p>
+            <button class="btn-get-started">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M9 2L11 7L16 7L12 10.5L13.5 15L9 12L4.5 15L6 10.5L2 7L7 7L9 2Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Get Started
+            </button>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">240k+</div>
+                    <div class="stat-label">Total Sale</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100k+</div>
+                    <div class="stat-label">Auctions</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">240k+</div>
+                    <div class="stat-label">Artists</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT — NFT CARD -->
+        <div class="hero-right">
+            <div class="nft-card">
+                <svg class="nft-card-image" viewBox="0 0 450 350" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="planet" cx="50%" cy="45%" r="50%">
+                            <stop offset="0%" stop-color="#4fc3f7"/>
+                            <stop offset="40%" stop-color="#2196f3"/>
+                            <stop offset="100%" stop-color="#1a237e"/>
+                        </radialGradient>
+                        <radialGradient id="planetGlow" cx="50%" cy="45%" r="50%">
+                            <stop offset="0%" stop-color="rgba(79,195,247,0.4)"/>
+                            <stop offset="100%" stop-color="rgba(79,195,247,0)"/>
+                        </radialGradient>
+                        <linearGradient id="surface" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#8d6e63"/>
+                            <stop offset="100%" stop-color="#4e342e"/>
+                        </linearGradient>
+                    </defs>
+
+                    <circle cx="50" cy="30" r="1.5" fill="#fff" opacity="0.8"/>
+                    <circle cx="120" cy="60" r="1" fill="#fff" opacity="0.6"/>
+                    <circle cx="200" cy="20" r="2" fill="#fff" opacity="0.9"/>
+                    <circle cx="350" cy="40" r="1" fill="#fff" opacity="0.7"/>
+                    <circle cx="400" cy="80" r="1.5" fill="#fff" opacity="0.5"/>
+                    <circle cx="30" cy="150" r="1" fill="#fff" opacity="0.6"/>
+                    <circle cx="420" cy="200" r="1.5" fill="#fff" opacity="0.8"/>
+                    <circle cx="80" cy="250" r="1" fill="#fff" opacity="0.4"/>
+                    <circle cx="380" cy="180" r="2" fill="#fff" opacity="0.7"/>
+                    <circle cx="150" cy="100" r="1" fill="#fff" opacity="0.5"/>
+                    <circle cx="280" cy="50" r="1.5" fill="#ffeb3b" opacity="0.6"/>
+                    <circle cx="320" cy="120" r="1" fill="#fff" opacity="0.6"/>
+
+                    <circle cx="300" cy="140" r="80" fill="url(#planetGlow)"/>
+                    <circle cx="300" cy="140" r="75" fill="url(#planet)"/>
+                    <ellipse cx="290" cy="130" rx="25" ry="15" fill="rgba(255,255,255,0.1)" transform="rotate(-20, 290, 130)"/>
+                    <ellipse cx="310" cy="155" rx="15" ry="8" fill="rgba(255,255,255,0.08)" transform="rotate(10, 310, 155)"/>
+                    <ellipse cx="280" cy="150" rx="10" ry="6" fill="rgba(255,255,255,0.06)"/>
+
+                    <g transform="translate(280, 210)">
+                        <ellipse cx="0" cy="0" rx="14" ry="18" fill="#e0e0e0"/>
+                        <circle cx="0" cy="-22" r="12" fill="#bdbdbd"/>
+                        <circle cx="0" cy="-22" r="8" fill="#4fc3f7" opacity="0.6"/>
+                        <rect x="-8" y="-10" width="16" height="20" rx="3" fill="#9e9e9e"/>
+                        <line x1="-6" y1="18" x2="-8" y2="35" stroke="#bdbdbd" stroke-width="5" stroke-linecap="round"/>
+                        <line x1="6" y1="18" x2="8" y2="35" stroke="#bdbdbd" stroke-width="5" stroke-linecap="round"/>
+                        <line x1="-14" y1="-5" x2="-22" y2="10" stroke="#bdbdbd" stroke-width="5" stroke-linecap="round"/>
+                        <line x1="14" y1="-5" x2="22" y2="10" stroke="#bdbdbd" stroke-width="5" stroke-linecap="round"/>
+                        <path d="M20 10 Q40 -10 30 -30" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" fill="none"/>
+                    </g>
+
+                    <g transform="translate(300, 72)">
+                        <circle cx="0" cy="-4" r="3" fill="#ff6f00"/>
+                        <rect x="-3" y="-1" width="6" height="8" rx="2" fill="#ff8f00"/>
+                    </g>
+
+                    <ellipse cx="100" cy="100" rx="12" ry="6" fill="#e91e63" opacity="0.7" transform="rotate(-15, 100, 100)"/>
+                    <ellipse cx="180" cy="80" rx="15" ry="5" fill="#ffeb3b" opacity="0.6" transform="rotate(10, 180, 80)"/>
+                    <ellipse cx="400" cy="150" rx="10" ry="4" fill="#4caf50" opacity="0.6"/>
+                    <ellipse cx="60" cy="200" rx="8" ry="3" fill="#2196f3" opacity="0.5"/>
+                    <ellipse cx="350" cy="250" rx="11" ry="4" fill="#9c27b0" opacity="0.5"/>
+                    <circle cx="150" cy="180" r="4" fill="#ff5722" opacity="0.4"/>
+                    <circle cx="380" cy="100" r="3" fill="#00bcd4" opacity="0.5"/>
+
+                    <rect x="0" y="300" width="450" height="50" fill="url(#surface)"/>
+                    <path d="M0 300 Q50 295 100 300 Q150 305 200 298 Q250 292 300 300 Q350 308 400 298 Q430 295 450 300" fill="#8d6e63" opacity="0.5"/>
+
+                    <circle cx="100" cy="310" r="2" fill="#fff" opacity="0.3"/>
+                    <circle cx="250" cy="320" r="1.5" fill="#fff" opacity="0.2"/>
+                    <circle cx="380" cy="315" r="2" fill="#fff" opacity="0.3"/>
+                    <circle cx="180" cy="325" r="1" fill="#fff" opacity="0.25"/>
+                </svg>
+
+                <div class="nft-card-info">
+                    <h3>Space Walking</h3>
+                    <div class="creator">
+                        <div class="creator-avatar"></div>
+                        <span>Animakid</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </section>
+
+
+
+    <!-- ===== TRENDING COLLECTION SECTION ===== -->
+    <section class="trending-section">
+        <div class="trending-header">
+            <h2>Trending Collection</h2>
+            <p>Checkout Our Weekly Updated Trending Collection.</p>
+        </div>
+
+        <div class="collections-grid">
+            <!-- Collection 1: DSGN Animals -->
+            <div class="collection-card">
+                <svg class="collection-main-image" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="dogBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00bcd4"/>
+                            <stop offset="50%" stop-color="#ff5722"/>
+                            <stop offset="100%" stop-color="#e91e63"/>
+                        </linearGradient>
+                        <linearGradient id="dogFur" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ffd54f"/>
+                            <stop offset="30%" stop-color="#ff7043"/>
+                            <stop offset="60%" stop-color="#ec407a"/>
+                            <stop offset="100%" stop-color="#7e57c2"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="400" height="280" fill="url(#dogBg)"/>
+                    <ellipse cx="200" cy="160" rx="110" ry="95" fill="url(#dogFur)"/>
+                    <ellipse cx="100" cy="140" rx="35" ry="60" fill="#5d4037" transform="rotate(-20, 100, 140)"/>
+                    <ellipse cx="300" cy="140" rx="35" ry="60" fill="#5d4037" transform="rotate(20, 300, 140)"/>
+                    <ellipse cx="105" cy="145" rx="25" ry="45" fill="#8d6e63" transform="rotate(-20, 105, 145)"/>
+                    <ellipse cx="295" cy="145" rx="25" ry="45" fill="#8d6e63" transform="rotate(20, 295, 145)"/>
+                    <ellipse cx="200" cy="175" rx="45" ry="35" fill="#fff8e1"/>
+                    <ellipse cx="200" cy="165" rx="20" ry="15" fill="#ff8a80"/>
+                    <g>
+                        <circle cx="165" cy="140" r="28" fill="none" stroke="#3e2723" stroke-width="6"/>
+                        <circle cx="235" cy="140" r="28" fill="none" stroke="#3e2723" stroke-width="6"/>
+                        <line x1="193" y1="140" x2="207" y2="140" stroke="#3e2723" stroke-width="6"/>
+                        <circle cx="165" cy="140" r="12" fill="#5d4037"/>
+                        <circle cx="235" cy="140" r="12" fill="#5d4037"/>
+                        <circle cx="168" cy="137" r="4" fill="#fff"/>
+                        <circle cx="238" cy="137" r="4" fill="#fff"/>
+                    </g>
+                    <ellipse cx="140" cy="100" rx="30" ry="25" fill="#26c6da" opacity="0.8"/>
+                    <ellipse cx="260" cy="110" rx="25" ry="20" fill="#ab47bc" opacity="0.8"/>
+                    <ellipse cx="180" cy="90" rx="20" ry="18" fill="#ffca28" opacity="0.8"/>
+                    <rect x="150" y="240" width="100" height="20" rx="5" fill="#1a237e"/>
+                    <circle cx="200" cy="250" r="8" fill="#ffd700"/>
+                </svg>
+                <div class="collection-thumbnails">
+                    <svg class="thumb" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="70" height="70" fill="#1a1a2e"/>
+                        <circle cx="35" cy="35" r="25" fill="#ec407a"/>
+                        <circle cx="28" cy="32" r="6" fill="#fff"/>
+                        <circle cx="42" cy="32" r="6" fill="#fff"/>
+                        <circle cx="28" cy="32" r="3" fill="#1a1a2e"/>
+                        <circle cx="42" cy="32" r="3" fill="#1a1a2e"/>
+                    </svg>
+                    <svg class="thumb" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="70" height="70" fill="#1a1a2e"/>
+                        <rect x="20" y="20" width="30" height="30" rx="5" fill="#7e57c2"/>
+                        <circle cx="35" cy="30" r="5" fill="#fff"/>
+                        <circle cx="35" cy="30" r="2.5" fill="#1a1a2e"/>
+                    </svg>
+                    <div class="collection-count">1025+</div>
+                </div>
+                <div class="collection-info">
+                    <h3>DSGN Animals</h3>
+                    <div class="collection-creator">
+                        <div class="creator-icon"></div>
+                        <span>MrFox</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collection 2: Magic Mushrooms -->
+            <div class="collection-card">
+                <svg class="collection-main-image" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="mushroomCap" cx="50%" cy="30%" r="70%">
+                            <stop offset="0%" stop-color="#ffa726"/>
+                            <stop offset="40%" stop-color="#ef5350"/>
+                            <stop offset="100%" stop-color="#ab47bc"/>
+                        </radialGradient>
+                        <linearGradient id="mushroomStem" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#fff9c4"/>
+                            <stop offset="100%" stop-color="#fff59d"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="400" height="280" fill="#1a1a2e"/>
+                    <ellipse cx="200" cy="240" rx="30" ry="40" fill="url(#mushroomStem)"/>
+                    <ellipse cx="200" cy="100" rx="110" ry="50" fill="url(#mushroomCap)"/>
+                    <circle cx="160" cy="90" r="8" fill="#ffd54f" opacity="0.9"/>
+                    <circle cx="200" cy="80" r="10" fill="#ffd54f" opacity="0.9"/>
+                    <circle cx="240" cy="90" r="7" fill="#ffd54f" opacity="0.9"/>
+                    <circle cx="180" cy="100" r="6" fill="#ffd54f" opacity="0.8"/>
+                    <circle cx="220" cy="100" r="6" fill="#ffd54f" opacity="0.8"/>
+                    <ellipse cx="200" cy="145" rx="90" ry="15" fill="#5d4037" opacity="0.6"/>
+                    <g>
+                        <ellipse cx="100" cy="230" rx="18" ry="25" fill="url(#mushroomStem)"/>
+                        <ellipse cx="100" cy="200" rx="35" ry="18" fill="#26c6da"/>
+                        <circle cx="88" cy="195" r="4" fill="#fff" opacity="0.7"/>
+                        <circle cx="100" cy="192" r="5" fill="#fff" opacity="0.7"/>
+                        <circle cx="112" cy="195" r="4" fill="#fff" opacity="0.7"/>
+                    </g>
+                    <g>
+                        <ellipse cx="300" cy="235" rx="15" ry="20" fill="url(#mushroomStem)"/>
+                        <ellipse cx="300" cy="210" rx="28" ry="15" fill="#66bb6a"/>
+                        <circle cx="290" cy="206" r="3" fill="#fff" opacity="0.7"/>
+                        <circle cx="300" cy="204" r="4" fill="#fff" opacity="0.7"/>
+                        <circle cx="310" cy="206" r="3" fill="#fff" opacity="0.7"/>
+                    </g>
+                    <circle cx="200" cy="100" r="120" fill="url(#planetGlow)" opacity="0.3"/>
+                </svg>
+                <div class="collection-thumbnails">
+                    <svg class="thumb" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="70" height="70" fill="#1a1a2e"/>
+                        <ellipse cx="35" cy="45" rx="10" ry="15" fill="#fff9c4"/>
+                        <ellipse cx="35" cy="30" rx="20" ry="10" fill="#ef5350"/>
+                    </svg>
+                    <svg class="thumb" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="70" height="70" fill="#1a1a2e"/>
+                        <ellipse cx="35" cy="45" rx="10" ry="15" fill="#fff9c4"/>
+                        <ellipse cx="35" cy="30" rx="20" ry="10" fill="#ffa726"/>
+                    </svg>
+                    <div class="collection-count">1025+</div>
+                </div>
+                <div class="collection-info">
+                    <h3>Magic Mushrooms</h3>
+                    <div class="collection-creator">
+                        <div class="creator-icon"></div>
+                        <span>Shroomie</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collection 3: Disco Machines -->
+            <div class="collection-card">
+                <svg class="collection-main-image" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="discoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ffa726"/>
+                            <stop offset="50%" stop-color="#ec407a"/>
+                            <stop offset="100%" stop-color="#26c6da"/>
+                        </linearGradient>
+                        <linearGradient id="robotBody" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#78909c"/>
+                            <stop offset="100%" stop-color="#546e7a"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="400" height="280" fill="url(#discoBg)"/>
+                    <rect x="0" y="240" width="400" height="40" fill="rgba(0,0,0,0.3)"/>
+                    <g transform="translate(200, 140)">
+                        <rect x="-25" y="60" width="18" height="60" rx="5" fill="url(#robotBody)"/>
+                        <rect x="7" y="60" width="18" height="60" rx="5" fill="url(#robotBody)"/>
+                        <ellipse cx="-16" y="125" rx="15" ry="8" fill="#ec407a"/>
+                        <ellipse cx="16" y="125" rx="15" ry="8" fill="#ec407a"/>
+                        <circle cx="-20" cy="130" r="3" fill="#fff"/>
+                        <circle cx="-12" cy="130" r="3" fill="#fff"/>
+                        <circle cx="-4" cy="130" r="3" fill="#fff"/>
+                        <circle cx="12" cy="130" r="3" fill="#fff"/>
+                        <circle cx="20" cy="130" r="3" fill="#fff"/>
+                        <circle cx="28" cy="130" r="3" fill="#fff"/>
+                        <rect x="-30" y="-20" width="60" height="70" rx="10" fill="url(#robotBody)"/>
+                        <circle cx="0" cy="10" r="18" fill="#26c6da" opacity="0.8"/>
+                        <circle cx="0" cy="10" r="12" fill="#00bcd4"/>
+                        <circle cx="0" cy="10" r="6" fill="#fff"/>
+                        <rect x="-50" y="-15" width="20" height="50" rx="8" fill="url(#robotBody)" transform="rotate(20, -40, 10)"/>
+                        <rect x="30" y="-15" width="20" height="50" rx="8" fill="url(#robotBody)" transform="rotate(-20, 40, 10)"/>
+                        <circle cx="-48" cy="30" r="10" fill="#ec407a"/>
+                        <circle cx="48" cy="25" r="10" fill="#ec407a"/>
+                        <rect x="-22" y="-60" width="44" height="35" rx="8" fill="url(#robotBody)"/>
+                        <ellipse cx="0" cy="-45" rx="18" ry="10" fill="#1a1a2e"/>
+                        <ellipse cx="0" cy="-45" rx="14" ry="7" fill="#26c6da" opacity="0.8"/>
+                        <line x1="0" y1="-60" x2="0" y2="-75" stroke="#78909c" stroke-width="3"/>
+                        <circle cx="0" cy="-78" r="6" fill="#ffeb3b"/>
+                        <circle cx="0" cy="-78" r="3" fill="#fff59d"/>
+                        <rect x="-28" y="0" width="8" height="30" rx="3" fill="#ec407a" opacity="0.8"/>
+                        <rect x="20" y="0" width="8" height="30" rx="3" fill="#ec407a" opacity="0.8"/>
+                    </g>
+                    <circle cx="50" cy="50" r="3" fill="#fff" opacity="0.8">
+                        <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="350" cy="80" r="4" fill="#ffeb3b" opacity="0.8">
+                        <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="80" cy="200" r="3" fill="#fff" opacity="0.6"/>
+                    <circle cx="320" cy="180" r="2" fill="#fff" opacity="0.7"/>
+                </svg>
+                <div class="collection-thumbnails">
+                    <svg class="thumb" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="70" height="70" fill="#1a1a2e"/>
+                        <rect x="25" y="25" width="20" height="30" rx="3" fill="#78909c"/>
+                        <circle cx="35" cy="35" r="6" fill="#26c6da"/>
+                    </svg>
+                    <svg class="thumb" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="70" height="70" fill="#1a1a2e"/>
+                        <rect x="25" y="25" width="20" height="30" rx="3" fill="#78909c"/>
+                        <circle cx="35" cy="35" r="6" fill="#ec407a"/>
+                    </svg>
+                    <div class="collection-count">1025+</div>
+                </div>
+                <div class="collection-info">
+                    <h3>Disco Machines</h3>
+                    <div class="collection-creator">
+                        <div class="creator-icon"></div>
+                        <span>BeKind2Robots</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TOP CREATORS SECTION ===== -->
+    <section class="top-creators-section">
+        <div class="top-creators-header">
+            <div class="top-creators-header-text">
+                <h2>Top Creators</h2>
+                <p>Checkout Top Rated Creators On The NFT Marketplace</p>
+            </div>
+            <button class="btn-view-rankings">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 2L10 6L14 6L11 9L12.5 14L8 11L3.5 14L5 9L2 6L6 6L8 2Z" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                View Rankings
+            </button>
+        </div>
+
+        <div class="creators-grid">
+            <!-- Creator 1: Keepitreal -->
+            <div class="creator-card">
+                <div class="creator-rank">1</div>
+                <div class="creator-avatar-circle">
+                    <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="avatar1bg" cx="50%" cy="40%" r="50%">
+                                <stop offset="0%" stop-color="#1a5c4c"/>
+                                <stop offset="100%" stop-color="#0d3328"/>
+                            </radialGradient>
+                        </defs>
+                        <rect width="90" height="90" fill="url(#avatar1bg)"/>
+                        <ellipse cx="45" cy="30" rx="28" ry="22" fill="#ff6b35"/>
+                        <ellipse cx="25" cy="45" rx="10" ry="18" fill="#ff6b35"/>
+                        <ellipse cx="65" cy="45" rx="10" ry="18" fill="#ff6b35"/>
+                        <ellipse cx="45" cy="48" rx="22" ry="24" fill="#f5c5a3"/>
+                        <rect x="28" y="40" width="14" height="10" rx="3" fill="none" stroke="#333" stroke-width="2.5"/>
+                        <rect x="46" y="40" width="14" height="10" rx="3" fill="none" stroke="#333" stroke-width="2.5"/>
+                        <line x1="42" y1="45" x2="46" y2="45" stroke="#333" stroke-width="2"/>
+                        <circle cx="35" cy="46" r="3" fill="#5d4037"/>
+                        <circle cx="53" cy="46" r="3" fill="#5d4037"/>
+                        <circle cx="36" cy="45" r="1" fill="#fff"/>
+                        <circle cx="54" cy="45" r="1" fill="#fff"/>
+                        <ellipse cx="45" cy="52" rx="3" ry="2" fill="#e8b08e"/>
+                        <path d="M40 60 Q45 63 50 60" stroke="#c47e6a" stroke-width="1.5" fill="none"/>
+                        <rect x="40" y="70" width="10" height="8" fill="#f5c5a3"/>
+                    </svg>
+                </div>
+                <div class="creator-name">Keepitreal</div>
+                <div class="creator-sales">Total Sales: <span>34.53 ETH</span></div>
+            </div>
+
+            <!-- Creator 2: DigiLab -->
+            <div class="creator-card">
+                <div class="creator-rank">2</div>
+                <div class="creator-avatar-circle">
+                    <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="avatar2bg" cx="50%" cy="40%" r="50%">
+                                <stop offset="0%" stop-color="#5c3a1a"/>
+                                <stop offset="100%" stop-color="#33200d"/>
+                            </radialGradient>
+                        </defs>
+                        <rect width="90" height="90" fill="url(#avatar2bg)"/>
+                        <path d="M20 35 Q25 15 45 12 Q65 15 70 35 L68 25 Q60 18 45 16 Q30 18 22 25 Z" fill="#1a3a5c"/>
+                        <rect x="20" y="28" width="50" height="12" rx="4" fill="#1a3a5c"/>
+                        <ellipse cx="45" cy="48" rx="22" ry="24" fill="#f0d0b0"/>
+                        <rect x="28" y="40" width="14" height="10" rx="3" fill="none" stroke="#c49b3c" stroke-width="2.5"/>
+                        <rect x="46" y="40" width="14" height="10" rx="3" fill="none" stroke="#c49b3c" stroke-width="2.5"/>
+                        <line x1="42" y1="45" x2="46" y2="45" stroke="#c49b3c" stroke-width="2"/>
+                        <circle cx="35" cy="46" r="3" fill="#333"/>
+                        <circle cx="53" cy="46" r="3" fill="#333"/>
+                        <circle cx="36" cy="45" r="1" fill="#fff"/>
+                        <circle cx="54" cy="45" r="1" fill="#fff"/>
+                        <ellipse cx="45" cy="52" rx="3" ry="2" fill="#d4a880"/>
+                        <line x1="41" y1="60" x2="49" y2="60" stroke="#a07050" stroke-width="1.5"/>
+                        <rect x="30" y="70" width="30" height="8" rx="3" fill="#5c3a1a"/>
+                    </svg>
+                </div>
+                <div class="creator-name">DigiLab</div>
+                <div class="creator-sales">Total Sales: <span>34.53 ETH</span></div>
+            </div>
+
+            <!-- Creator 3: GravityOne -->
+            <div class="creator-card">
+                <div class="creator-rank">3</div>
+                <div class="creator-avatar-circle">
+                    <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="avatar3bg" cx="50%" cy="40%" r="50%">
+                                <stop offset="0%" stop-color="#2a1a3c"/>
+                                <stop offset="100%" stop-color="#1a0d28"/>
+                            </radialGradient>
+                        </defs>
+                        <rect width="90" height="90" fill="url(#avatar3bg)"/>
+                        <ellipse cx="45" cy="28" rx="28" ry="20" fill="#1a1a2e"/>
+                        <path d="M17 28 Q17 10 45 8 Q73 10 73 28 L73 45 Q73 35 45 32 Q17 35 17 45 Z" fill="#1a1a2e"/>
+                        <ellipse cx="45" cy="48" rx="22" ry="24" fill="#f5c8a8"/>
+                        <ellipse cx="35" cy="44" rx="4" ry="2.5" fill="#2a1a0d"/>
+                        <ellipse cx="55" cy="44" rx="4" ry="2.5" fill="#2a1a0d"/>
+                        <circle cx="36" cy="43" r="1.2" fill="#fff"/>
+                        <circle cx="56" cy="43" r="1.2" fill="#fff"/>
+                        <line x1="30" y1="38" x2="40" y2="37" stroke="#1a1a2e" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="50" y1="37" x2="60" y2="38" stroke="#1a1a2e" stroke-width="2" stroke-linecap="round"/>
+                        <ellipse cx="45" cy="50" rx="2.5" ry="2" fill="#e0a880"/>
+                        <path d="M40 58 Q45 62 50 58" stroke="#c47e6a" stroke-width="1.5" fill="none"/>
+                        <rect x="40" y="70" width="10" height="8" fill="#f5c8a8"/>
+                    </svg>
+                </div>
+                <div class="creator-name">GravityOne</div>
+                <div class="creator-sales">Total Sales: <span>34.53 ETH</span></div>
+            </div>
+
+            <!-- Creator 4: Juani -->
+            <div class="creator-card">
+                <div class="creator-rank">4</div>
+                <div class="creator-avatar-circle">
+                    <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="avatar4bg" cx="50%" cy="40%" r="50%">
+                                <stop offset="0%" stop-color="#1a3c4c"/>
+                                <stop offset="100%" stop-color="#0d2833"/>
+                            </radialGradient>
+                        </defs>
+                        <rect width="90" height="90" fill="url(#avatar4bg)"/>
+                        <circle cx="28" cy="22" r="10" fill="#1a1a2e"/>
+                        <circle cx="62" cy="22" r="10" fill="#1a1a2e"/>
+                        <ellipse cx="45" cy="30" rx="28" ry="20" fill="#1a1a2e"/>
+                        <ellipse cx="45" cy="48" rx="22" ry="24" fill="#f5c8a8"/>
+                        <ellipse cx="35" cy="44" rx="4" ry="2.5" fill="#2a1a0d"/>
+                        <ellipse cx="55" cy="44" rx="4" ry="2.5" fill="#2a1a0d"/>
+                        <circle cx="36" cy="43" r="1.2" fill="#fff"/>
+                        <circle cx="56" cy="43" r="1.2" fill="#fff"/>
+                        <line x1="30" y1="38" x2="40" y2="37" stroke="#1a1a2e" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="50" y1="37" x2="60" y2="38" stroke="#1a1a2e" stroke-width="2" stroke-linecap="round"/>
+                        <ellipse cx="45" cy="50" rx="2.5" ry="2" fill="#e0a880"/>
+                        <path d="M41 58 Q45 61 49 58" stroke="#c47e6a" stroke-width="1.5" fill="none"/>
+                        <rect x="32" y="70" width="26" height="10" rx="3" fill="#2a5c8c"/>
+                    </svg>
+                </div>
+                <div class="creator-name">Juani</div>
+                <div class="creator-sales">Total Sales: <span>34.53 ETH</span></div>
+            </div>
+
+            <!-- Creator 5: BlueWhale -->
+            <div class="creator-card">
+                <div class="creator-rank">5</div>
+                <div class="creator-avatar-circle">
+                    <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="avatar5bg" cx="50%" cy="40%" r="50%">
+                                <stop offset="0%" stop-color="#1a4c5c"/>
+                                <stop offset="100%" stop-color="#0d2833"/>
+                            </radialGradient>
+                        </defs>
+                        <rect width="90" height="90" fill="url(#avatar5bg)"/>
+                        <rect x="25" y="25" width="40" height="45" rx="8" fill="#5c7a8c"/>
+                        <rect x="30" y="30" width="30" height="35" rx="5" fill="#4a6578"/>
+                        <circle cx="38" cy="44" r="5" fill="#ff6b35"/>
+                        <circle cx="52" cy="44" r="5" fill="#ff6b35"/>
+                        <circle cx="38" cy="44" r="2.5" fill="#fff"/>
+                        <circle cx="52" cy="44" r="2.5" fill="#fff"/>
+                        <line x1="35" y1="28" x2="35" y2="32" stroke="#7a9aac" stroke-width="2"/>
+                        <line x1="45" y1="28" x2="45" y2="32" stroke="#7a9aac" stroke-width="2"/>
+                        <line x1="55" y1="28" x2="55" y2="32" stroke="#7a9aac" stroke-width="2"/>
+                        <rect x="38" y="55" width="14" height="3" rx="1.5" fill="#2a3a4a"/>
+                        <line x1="45" y1="25" x2="45" y2="18" stroke="#5c7a8c" stroke-width="2"/>
+                        <circle cx="45" cy="16" r="3" fill="#ff6b35"/>
+                        <rect x="38" y="70" width="14" height="8" fill="#4a6578"/>
+                    </svg>
+                </div>
+                <div class="creator-name">BlueWhale</div>
+                <div class="creator-sales">Total Sales: <span>34.53 ETH</span></div>
+            </div>
+
+            <!-- Creator 6: Mr Fox -->
+            <div class="creator-card">
+                <div class="creator-rank">6</div>
+                <div class="creator-avatar-circle">
+                    <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="avatar6bg" cx="50%" cy="40%" r="50%">
+                                <stop offset="0%" stop-color="#1a2a1a"/>
+                                <stop offset="100%" stop-color="#0d1a0d"/>
+                            </radialGradient>
+                        </defs>
+                        <rect width="90" height="90" fill="url(#avatar6bg)"/>
+                        <polygon points="22,30 35,10 40,35" fill="#e87020"/>
+                        <polygon points="68,30 55,10 50,35" fill="#e87020"/>
+                        <polygon points="26,30 35,16 38,33" fill="#f5a060"/>
+                        <polygon points="64,30 55,16 52,33" fill="#f5a060"/>
+                        <ellipse cx="45" cy="48" rx="24" ry="22" fill="#e87020"/>
+                        <ellipse cx="45" cy="55" rx="14" ry="10" fill="#f5e6d0"/>
+                        <circle cx="35" cy="44" r="6" fill="none" stroke="#333" stroke-width="2"/>
+                        <circle cx="55" cy="44" r="6" fill="none" stroke="#333" stroke-width="2"/>
+                        <line x1="41" y1="44" x2="49" y2="44" stroke="#333" stroke-width="2"/>
+                        <circle cx="35" cy="44" r="3" fill="#ffeb3b"/>
+                        <circle cx="55" cy="44" r="3" fill="#ffeb3b"/>
+                        <circle cx="35" cy="44" r="1.5" fill="#1a1a0d"/>
+                        <circle cx="55" cy="44" r="1.5" fill="#1a1a0d"/>
+                        <ellipse cx="45" cy="53" rx="4" ry="3" fill="#333"/>
+                        <path d="M40 58 Q45 61 50 58" stroke="#333" stroke-width="1" fill="none"/>
+                        <polygon points="40,70 30,66 40,74" fill="#ec407a"/>
+                        <polygon points="50,70 60,66 50,74" fill="#ec407a"/>
+                        <circle cx="45" cy="70" r="3" fill="#ab47bc"/>
+                    </svg>
+                </div>
+                <div class="creator-name">Mr Fox</div>
+                <div class="creator-sales">Total Sales: <span>34.53 ETH</span></div>
+            </div>
+
+            <!-- Creator 7: Shroomie -->
+            <div class="creator-card">
+                <div class="creator-rank">7</div>
+                <div class="creator-avatar-circle">
+                    <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="avatar7bg" cx="50%" cy="40%" r="50%">
+                                <stop offset="0%" stop-color="#3c2a1a"/>
+                                <stop offset="100%" stop-color="#281a0d"/>
+                            </radialGradient>
+                        </defs>
+                        <rect width="90" height="90" fill="url(#avatar7bg)"/>
+                        <ellipse cx="45" cy="22" rx="30" ry="14" fill="#ab47bc"/>
+                        <circle cx="35" cy="18" r="3" fill="#ffeb3b"/>
+                        <circle cx="48" cy="15" r="4" fill="#ffeb3b"/>
+                        <circle cx="58" cy="18" r="3" fill="#ffeb3b"/>
+                        <ellipse cx="45" cy="50" rx="22" ry="22" fill="#f5c8a8"/>
+                        <rect x="23" y="36" width="44" height="8" rx="3" fill="#26c6da"/>
+                        <circle cx="45" cy="40" r="4" fill="#00bcd4"/>
+                        <ellipse cx="35" cy="48" rx="3" ry="2" fill="#2a1a0d"/>
+                        <ellipse cx="55" cy="48" rx="3" ry="2" fill="#2a1a0d"/>
+                        <circle cx="36" cy="47" r="1" fill="#fff"/>
+                        <circle cx="56" cy="47" r="1" fill="#fff"/>
+                        <ellipse cx="45" cy="52" rx="2.5" ry="2" fill="#e0a880"/>
+                        <path d="M41 58 Q45 61 49 58" stroke="#c47e6a" stroke-width="1.5" fill="none"/>
+                        <rect x="40" y="70" width="10" height="8" fill="#f5c8a8"/>
+                    </svg>
+                </div>
+                <div class="creator-name">Shroomie</div>
+                <div class="creator-sales">Total Sales: <span>34.53 ETH</span></div>
+            </div>
+
+            <!-- Creator 8: Robotica -->
+            <div class="creator-card">
+                <div class="creator-rank">8</div>
+                <div class="creator-avatar-circle">
+                    <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="avatar8bg" cx="50%" cy="40%" r="50%">
+                                <stop offset="0%" stop-color="#1a1a2a"/>
+                                <stop offset="100%" stop-color="#0d0d1a"/>
+                            </radialGradient>
+                        </defs>
+                        <rect width="90" height="90" fill="url(#avatar8bg)"/>
+                        <rect x="25" y="25" width="40" height="45" rx="8" fill="#8c7a5c"/>
+                        <rect x="30" y="28" width="30" height="38" rx="5" fill="#c49b3c"/>
+                        <circle cx="38" cy="42" r="5" fill="#26c6da"/>
+                        <circle cx="52" cy="42" r="5" fill="#26c6da"/>
+                        <circle cx="38" cy="42" r="2" fill="#fff"/>
+                        <circle cx="52" cy="42" r="2" fill="#fff"/>
+                        <line x1="38" y1="55" x2="52" y2="55" stroke="#2a3a4a" stroke-width="1"/>
+                        <line x1="38" y1="58" x2="52" y2="58" stroke="#2a3a4a" stroke-width="1"/>
+                        <line x1="38" y1="61" x2="52" y2="61" stroke="#2a3a4a" stroke-width="1"/>
+                        <rect x="20" y="38" width="8" height="12" rx="3" fill="#6b5a3a"/>
+                        <rect x="62" y="38" width="8" height="12" rx="3" fill="#6b5a3a"/>
+                        <rect x="38" y="70" width="14" height="8" fill="#8c7a5c"/>
+                    </svg>
+                </div>
+                <div class="creator-name">Robotica</div>
+                <div class="creator-sales">Total Sales: <span>34.53 ETH</span></div>
+            </div>
+
+            <!-- Creator 9: RustyRobot -->
+            <div class="creator-card">
+                <div class="creator-rank">9</div>
+                <div class="creator-avatar-circle">
+                    <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="avatar9bg" cx="50%" cy="40%" r="50%">
+                                <stop offset="0%" stop-color="#1a2a1a"/>
+                                <stop offset="100%" stop-color="#0d1a0d"/>
+                            </radialGradient>
+                        </defs>
+                        <rect width="90" height="90" fill="url(#avatar9bg)"/>
+                        <rect x="25" y="22" width="40" height="48" rx="10" fill="#7a8c5c"/>
+                        <rect x="30" y="28" width="30" height="36" rx="6" fill="#8c9c6c"/>
+                        <circle cx="38" cy="42" r="7" fill="#ffeb3b"/>
+                        <circle cx="52" cy="42" r="7" fill="#ffeb3b"/>
+                        <circle cx="38" cy="42" r="3" fill="#1a1a0d"/>
+                        <circle cx="52" cy="42" r="3" fill="#1a1a0d"/>
+                        <circle cx="40" cy="40" r="1.2" fill="#fff"/>
+                        <circle cx="54" cy="40" r="1.2" fill="#fff"/>
+                        <line x1="45" y1="22" x2="45" y2="15" stroke="#7a8c5c" stroke-width="2"/>
+                        <circle cx="45" cy="13" r="4" fill="#ff6b35"/>
+                        <rect x="38" y="55" width="14" height="4" rx="2" fill="#5a6a3c"/>
+                        <circle cx="32" cy="50" r="3" fill="#c4703c" opacity="0.5"/>
+                        <circle cx="58" cy="35" r="2" fill="#c4703c" opacity="0.5"/>
+                        <rect x="38" y="70" width="14" height="8" fill="#6a7a4c"/>
+                    </svg>
+                </div>
+                <div class="creator-name">RustyRobot</div>
+                <div class="creator-sales">Total Sales: <span>34.53 ETH</span></div>
+            </div>
+
+            <!-- Creator 10: Animakid -->
+            <div class="creator-card">
+                <div class="creator-rank">10</div>
+                <div class="creator-avatar-circle">
+                    <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="avatar10bg" cx="50%" cy="40%" r="50%">
+                                <stop offset="0%" stop-color="#2a1a2a"/>
+                                <stop offset="100%" stop-color="#1a0d1a"/>
+                            </radialGradient>
+                            <linearGradient id="visorGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#ff6b35"/>
+                                <stop offset="33%" stop-color="#ffeb3b"/>
+                                <stop offset="66%" stop-color="#26c6da"/>
+                                <stop offset="100%" stop-color="#ab47bc"/>
+                            </linearGradient>
+                        </defs>
+                        <rect width="90" height="90" fill="url(#avatar10bg)"/>
+                        <ellipse cx="45" cy="45" rx="24" ry="26" fill="#f5c8a8"/>
+                        <path d="M25 38 Q45 30 65 38 L65 52 Q45 58 25 52 Z" fill="url(#visorGrad)"/>
+                        <circle cx="36" cy="44" r="3" fill="#1a1a0d"/>
+                        <circle cx="54" cy="44" r="3" fill="#1a1a0d"/>
+                        <path d="M40 60 Q45 63 50 60" stroke="#c47e6a" stroke-width="1.5" fill="none"/>
+                        <rect x="40" y="69" width="10" height="9" fill="#f5c8a8"/>
+                    </svg>
+                </div>
+                <div class="creator-name">Animakid</div>
+                <div class="creator-sales">Total Sales: <span>34.53 ETH</span></div>
+            </div>
+
+            <!-- Creator 11: Dotgu -->
+            <div class="creator-card">
+                <div class="creator-rank">11</div>
+                <div class="creator-avatar-circle">
+                    <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="avatar11bg" cx="50%" cy="40%" r="50%">
+                                <stop offset="0%" stop-color="#2a2a1a"/>
+                                <stop offset="100%" stop-color="#1a1a0d"/>
+                            </radialGradient>
+                        </defs>
+                        <rect width="90" height="90" fill="url(#avatar11bg)"/>
+                        <circle cx="45" cy="30" r="26" fill="#1a1a2e"/>
+                        <ellipse cx="45" cy="48" rx="22" ry="24" fill="#c49060"/>
+                        <circle cx="30" cy="42" r="3" fill="#ffeb3b"/>
+                        <circle cx="35" cy="50" r="2.5" fill="#26c6da"/>
+                        <circle cx="45" cy="40" r="2" fill="#ff6b35"/>
+                        <circle cx="55" cy="42" r="3" fill="#ab47bc"/>
+                        <circle cx="60" cy="50" r="2.5" fill="#ec407a"/>
+                        <ellipse cx="36" cy="46" rx="3" ry="2" fill="#1a1a0d"/>
+                        <ellipse cx="54" cy="46" rx="3" ry="2" fill="#1a1a0d"/>
+                        <circle cx="37" cy="45" r="1" fill="#fff"/>
+                        <circle cx="55" cy="45" r="1" fill="#fff"/>
+                        <path d="M38 56 Q45 62 52 56" stroke="#a07050" stroke-width="2" fill="none"/>
+                        <rect x="40" y="70" width="10" height="8" fill="#c49060"/>
+                    </svg>
+                </div>
+                <div class="creator-name">Dotgu</div>
+                <div class="creator-sales">Total Sales: <span>34.53 ETH</span></div>
+            </div>
+
+            <!-- Creator 12: Ghiblier -->
+            <div class="creator-card">
+                <div class="creator-rank">12</div>
+                <div class="creator-avatar-circle">
+                    <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="avatar12bg" cx="50%" cy="40%" r="50%">
+                                <stop offset="0%" stop-color="#3c2a2a"/>
+                                <stop offset="100%" stop-color="#281a1a"/>
+                            </radialGradient>
+                        </defs>
+                        <rect width="90" height="90" fill="url(#avatar12bg)"/>
+                        <line x1="15" y1="20" x2="30" y2="30" stroke="#5c3a2a" stroke-width="2"/>
+                        <line x1="75" y1="20" x2="60" y2="30" stroke="#5c3a2a" stroke-width="2"/>
+                        <circle cx="12" cy="18" r="4" fill="#ffb7c5"/>
+                        <circle cx="20" cy="12" r="3" fill="#ffb7c5"/>
+                        <circle cx="78" cy="18" r="4" fill="#ffb7c5"/>
+                        <circle cx="70" cy="12" r="3" fill="#ffb7c5"/>
+                        <ellipse cx="45" cy="30" rx="26" ry="18" fill="#1a1a2e"/>
+                        <path d="M20 30 Q20 15 45 12 Q70 15 70 30" fill="#1a1a2e"/>
+                        <ellipse cx="45" cy="48" rx="22" ry="24" fill="#f5c8a8"/>
+                        <ellipse cx="36" cy="44" rx="3.5" ry="2" fill="#2a1a0d"/>
+                        <ellipse cx="54" cy="44" rx="3.5" ry="2" fill="#2a1a0d"/>
+                        <circle cx="37" cy="43" r="1" fill="#fff"/>
+                        <circle cx="55" cy="43" r="1" fill="#fff"/>
+                        <circle cx="30" cy="52" r="4" fill="#ffb7c5" opacity="0.5"/>
+                        <circle cx="60" cy="52" r="4" fill="#ffb7c5" opacity="0.5"/>
+                        <ellipse cx="45" cy="50" rx="2" ry="1.5" fill="#e0a880"/>
+                        <path d="M42 58 Q45 60 48 58" stroke="#c47e6a" stroke-width="1.5" fill="none"/>
+                        <rect x="40" y="70" width="10" height="8" fill="#f5c8a8"/>
+                    </svg>
+                </div>
+                <div class="creator-name">Ghiblier</div>
+                <div class="creator-sales">Total Sales: <span>34.53 ETH</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== BROWSE CATEGORIES SECTION ===== -->
+    <section class="categories-section">
+        <h2 class="section-title">Browse Categories</h2>
+        <div class="categories-grid">
+            <!-- Art -->
+            <div class="category-card">
+                <div class="category-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                        <path d="M2 2l7.586 7.586"></path>
+                        <circle cx="11" cy="11" r="2"></circle>
+                    </svg>
+                </div>
+                <h3>Art</h3>
+            </div>
+
+            <!-- Collectibles -->
+            <div class="category-card">
+                <div class="category-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                </div>
+                <h3>Collectibles</h3>
+            </div>
+
+            <!-- Music -->
+            <div class="category-card">
+                <div class="category-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M9 18V5l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="18" cy="16" r="3"></circle>
+                    </svg>
+                </div>
+                <h3>Music</h3>
+            </div>
+
+            <!-- Photography -->
+            <div class="category-card">
+                <div class="category-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                </div>
+                <h3>Photography</h3>
+            </div>
+
+            <!-- Video -->
+            <div class="category-card">
+                <div class="category-icon">
+                    <svg viewBox="0 0 24 24">
+                        <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                    </svg>
+                </div>
+                <h3>Video</h3>
+            </div>
+
+            <!-- Utility -->
+            <div class="category-card">
+                <div class="category-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                    </svg>
+                </div>
+                <h3>Utility</h3>
+            </div>
+
+            <!-- Sport -->
+            <div class="category-card">
+                <div class="category-icon">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="2" x2="12" y2="22"></line>
+                        <path d="M12 2a10 10 0 0 1 10 10"></path>
+                        <path d="M12 12a10 10 0 0 1-10-10"></path>
+                    </svg>
+                </div>
+                <h3>Sport</h3>
+            </div>
+
+            <!-- Virtual Worlds -->
+            <div class="category-card">
+                <div class="category-icon">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M2 12h20"></path>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                </div>
+                <h3>Virtual Worlds</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FEATURED NFT SECTION ===== -->
+    <section class="featured-nft-section">
+        <div class="featured-nft-bg"></div>
+        <div class="featured-nft-container">
+            <div class="featured-nft-image-wrapper">
+                <svg class="featured-nft-image" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="mushroomCap" cx="50%" cy="30%" r="70%">
+                            <stop offset="0%" stop-color="#ff006e"/>
+                            <stop offset="20%" stop-color="#8338ec"/>
+                            <stop offset="40%" stop-color="#3a86ff"/>
+                            <stop offset="60%" stop-color="#06ffa5"/>
+                            <stop offset="80%" stop-color="#ffbe0b"/>
+                            <stop offset="100%" stop-color="#fb5607"/>
+                        </radialGradient>
+                        <linearGradient id="mushroomStem" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#ff006e"/>
+                            <stop offset="50%" stop-color="#8338ec"/>
+                            <stop offset="100%" stop-color="#3a86ff"/>
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <rect width="800" height="600" fill="transparent"/>
+                    
+                    <!-- Mushroom cap with colorful particles -->
+                    <ellipse cx="400" cy="200" rx="350" ry="120" fill="url(#mushroomCap)" filter="url(#glow)"/>
+                    
+                    <!-- Particle effects on cap -->
+                    <g fill="#ffffff" opacity="0.8">
+                        <circle cx="200" cy="150" r="4"/>
+                        <circle cx="250" cy="130" r="3"/>
+                        <circle cx="300" cy="160" r="5"/>
+                        <circle cx="350" cy="140" r="3"/>
+                        <circle cx="400" cy="120" r="4"/>
+                        <circle cx="450" cy="150" r="3"/>
+                        <circle cx="500" cy="135" r="5"/>
+                        <circle cx="550" cy="155" r="3"/>
+                        <circle cx="600" cy="145" r="4"/>
+                        <circle cx="220" cy="180" r="3"/>
+                        <circle cx="280" cy="190" r="4"/>
+                        <circle cx="340" cy="175" r="3"/>
+                        <circle cx="420" cy="185" r="4"/>
+                        <circle cx="480" cy="170" r="3"/>
+                        <circle cx="540" cy="180" r="4"/>
+                        <circle cx="600" cy="190" r="3"/>
+                    </g>
+                    
+                    <!-- Mushroom stem with gradient lines -->
+                    <path d="M 300 280 Q 320 400 340 550 L 460 550 Q 480 400 500 280 Z" fill="url(#mushroomStem)" opacity="0.9"/>
+                    
+                    <!-- Vertical lines on stem -->
+                    <g stroke="#ffffff" stroke-width="2" opacity="0.3">
+                        <line x1="320" y1="300" x2="320" y2="520"/>
+                        <line x1="340" y1="300" x2="340" y2="530"/>
+                        <line x1="360" y1="290" x2="360" y2="540"/>
+                        <line x1="380" y1="285" x2="380" y2="545"/>
+                        <line x1="400" y1="280" x2="400" y2="550"/>
+                        <line x1="420" y1="285" x2="420" y2="545"/>
+                        <line x1="440" y1="290" x2="440" y2="540"/>
+                        <line x1="460" y1="300" x2="460" y2="530"/>
+                        <line x1="480" y1="310" x2="480" y2="520"/>
+                    </g>
+                    
+                    <!-- Glow effect around mushroom -->
+                    <ellipse cx="400" cy="250" rx="380" ry="150" fill="none" stroke="#06ffa5" stroke-width="2" opacity="0.4" filter="url(#glow)"/>
+                </svg>
+            </div>
+            
+            <div class="featured-nft-content">
+                <div class="featured-creator">
+                    <div class="featured-creator-avatar"></div>
+                    <span class="featured-creator-name">Shroomie</span>
+                </div>
+                
+                <h2 class="featured-nft-title">Magic Mashrooms</h2>
+                
+                <button class="btn-see-nft">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 2C10.71 2 12.28 2.57 13.54 3.5L15.88 5.83C17.42 7.37 17.42 9.87 15.88 11.41L14.47 12.82C13.21 14.08 11.64 14.65 9.93 14.65C8.22 14.65 6.65 14.08 5.39 12.82L3.05 10.48C1.51 8.94 1.51 6.44 3.05 4.9L4.46 3.49C5.72 2.23 7.29 1.66 9 1.66V2Z"/>
+                        <circle cx="9" cy="8" r="3"/>
+                    </svg>
+                    See NFT
+                </button>
+                
+                <div class="auction-timer">
+                    <div class="auction-timer-label">Auction ends in:</div>
+                    <div class="timer-display">
+                        <div class="timer-unit">
+                            <div class="timer-value" id="hours">59</div>
+                            <div class="timer-label">Hours</div>
+                        </div>
+                        <div class="timer-separator">:</div>
+                        <div class="timer-unit">
+                            <div class="timer-value" id="minutes">59</div>
+                            <div class="timer-label">Minutes</div>
+                        </div>
+                        <div class="timer-separator">:</div>
+                        <div class="timer-unit">
+                            <div class="timer-value" id="seconds">59</div>
+                            <div class="timer-label">Seconds</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- ===== HOW IT WORKS SECTION ===== -->
+    <section class="how-it-works-section">
+        <div class="how-it-works-container">
+            <div class="how-it-works-header">
+                <h2>How It Works</h2>
+                <p>Find Out How To Get Started</p>
+            </div>
+            <div class="how-it-works-grid">
+                <!-- Setup Your Wallet -->
+                <div class="how-it-works-card">
+                    <div class="how-it-works-icon">
+                        <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Wallet body -->
+                            <rect x="10" y="30" width="65" height="45" rx="8" fill="url(#walletGrad)"/>
+                            <defs>
+                                <linearGradient id="walletGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#a78bfa"/>
+                                    <stop offset="100%" stop-color="#7c3aed"/>
+                                </linearGradient>
+                                <linearGradient id="cardGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#f97316"/>
+                                    <stop offset="100%" stop-color="#ec4899"/>
+                                </linearGradient>
+                                <linearGradient id="cardGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#c084fc"/>
+                                    <stop offset="100%" stop-color="#818cf8"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Card behind -->
+                            <rect x="18" y="18" width="42" height="28" rx="5" fill="url(#cardGrad1)" transform="rotate(-8 39 32)"/>
+                            <!-- Card front -->
+                            <rect x="22" y="22" width="42" height="28" rx="5" fill="url(#cardGrad2)" transform="rotate(4 43 36)"/>
+                            <!-- Wallet clasp -->
+                            <rect x="60" y="42" width="18" height="22" rx="6" fill="#5b21b6"/>
+                            <circle cx="69" cy="53" r="4" fill="#a78bfa"/>
+                            <!-- Decorative dots -->
+                            <circle cx="20" cy="22" r="2.5" fill="#fff" opacity="0.7"/>
+                            <circle cx="75" cy="30" r="2" fill="#fff" opacity="0.5"/>
+                            <circle cx="12" cy="60" r="2" fill="#c084fc" opacity="0.8"/>
+                        </svg>
+                    </div>
+                    <h3>Setup Your Wallet</h3>
+                    <p>Set up your wallet of choice. Connect it to the Animarket by clicking the wallet icon in the top right corner.</p>
+                </div>
+
+                <!-- Create Collection -->
+                <div class="how-it-works-card">
+                    <div class="how-it-works-icon">
+                        <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="folderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#a78bfa"/>
+                                    <stop offset="100%" stop-color="#6d28d9"/>
+                                </linearGradient>
+                                <linearGradient id="imgCard" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#f97316"/>
+                                    <stop offset="100%" stop-color="#ec4899"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Folder base -->
+                            <rect x="8" y="38" width="70" height="42" rx="8" fill="url(#folderGrad)"/>
+                            <path d="M8 44 Q8 38 14 38 L30 38 L36 32 L74 32 Q80 32 80 38 L80 44 Z" fill="#7c3aed"/>
+                            <!-- Image card (rotated) -->
+                            <rect x="30" y="18" width="36" height="42" rx="6" fill="url(#imgCard)" transform="rotate(-10 48 39)"/>
+                            <!-- Mountain icon on card -->
+                            <polygon points="36,50 44,36 52,50" fill="#fff" opacity="0.8" transform="rotate(-10 44 43)"/>
+                            <circle cx="51" cy="33" r="4" fill="#fff" opacity="0.8" transform="rotate(-10 51 33)"/>
+                            <!-- Music note card -->
+                            <rect x="42" y="28" width="28" height="36" rx="5" fill="#818cf8" transform="rotate(8 56 46)"/>
+                            <text x="50" y="52" font-size="18" fill="#fff" opacity="0.9" transform="rotate(8 56 46)">♪</text>
+                            <!-- Dots -->
+                            <circle cx="18" cy="30" r="2" fill="#fff" opacity="0.5"/>
+                            <circle cx="76" cy="26" r="2.5" fill="#fff" opacity="0.5"/>
+                            <circle cx="12" cy="70" r="2" fill="#c084fc" opacity="0.7"/>
+                        </svg>
+                    </div>
+                    <h3>Create Collection</h3>
+                    <p>Upload your work and setup your collection. Add a description, social links and floor price.</p>
+                </div>
+
+                <!-- Start Earning -->
+                <div class="how-it-works-card">
+                    <div class="how-it-works-icon">
+                        <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="cartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#a78bfa"/>
+                                    <stop offset="100%" stop-color="#6d28d9"/>
+                                </linearGradient>
+                                <linearGradient id="chatGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#f97316"/>
+                                    <stop offset="100%" stop-color="#ec4899"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Cart body -->
+                            <path d="M20 35 L25 60 L70 60 L75 35 Z" fill="url(#cartGrad)"/>
+                            <!-- Cart handle -->
+                            <path d="M12 25 L20 25 L26 55" fill="none" stroke="#a78bfa" stroke-width="4" stroke-linecap="round"/>
+                            <!-- Cart grid lines -->
+                            <line x1="40" y1="35" x2="38" y2="60" stroke="#fff" stroke-width="1.5" opacity="0.4"/>
+                            <line x1="55" y1="35" x2="57" y2="60" stroke="#fff" stroke-width="1.5" opacity="0.4"/>
+                            <line x1="24" y1="47" x2="72" y2="47" stroke="#fff" stroke-width="1.5" opacity="0.4"/>
+                            <!-- Wheels -->
+                            <circle cx="32" cy="67" r="6" fill="#7c3aed" stroke="#a78bfa" stroke-width="2"/>
+                            <circle cx="63" cy="67" r="6" fill="#7c3aed" stroke="#a78bfa" stroke-width="2"/>
+                            <!-- Chat bubble -->
+                            <rect x="52" y="12" width="28" height="20" rx="6" fill="url(#chatGrad)"/>
+                            <path d="M58 32 L62 38 L68 32" fill="#ec4899"/>
+                            <!-- Dots in bubble -->
+                            <circle cx="60" cy="22" r="2.5" fill="#fff"/>
+                            <circle cx="66" cy="22" r="2.5" fill="#fff"/>
+                            <circle cx="72" cy="22" r="2.5" fill="#fff"/>
+                            <!-- Decorative -->
+                            <circle cx="14" cy="40" r="2" fill="#c084fc" opacity="0.7"/>
+                            <circle cx="80" cy="55" r="2" fill="#fff" opacity="0.5"/>
+                            <circle cx="20" cy="20" r="2.5" fill="#fff" opacity="0.4"/>
+                        </svg>
+                    </div>
+                    <h3>Start Earning</h3>
+                    <p>Choose between auctions and fixed-price listings. Start earning by selling your NFTs or trading others.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== NEWSLETTER SECTION ===== -->
+    <section class="newsletter-section">
+        <div class="newsletter-card">
+            <div class="newsletter-image-wrap">
+                <img src="/mnt/user-data/uploads/1777090916044_image.png" alt="Astronaut reading newspaper"/>
+            </div>
+            <div class="newsletter-content">
+                <h2>Join Our Weekly Digest</h2>
+                <p>Get Exclusive Promotions & Updates Straight To Your Inbox.</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Enter your email here"/>
+                    <button>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                        Subscribe
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="footer-top">
+            <!-- Brand -->
+            <div class="footer-brand">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+                        <rect x="4" y="4" width="24" height="24" rx="6" stroke="#a855f7" stroke-width="2"/>
+                        <circle cx="16" cy="14" r="4" stroke="#a855f7" stroke-width="2"/>
+                        <path d="M10 26 C10 22 12 18 16 18 C20 18 22 22 22 26" stroke="#a855f7" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span class="logo-text">NFT Marketplace</span>
+                </div>
+                <p>NFT marketplace UI created with Anima for Figma.</p>
+                <div class="footer-community-label">Join our community</div>
+                <div class="footer-socials">
+                    <!-- Discord -->
+                    <a href="#">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+                        </svg>
+                    </a>
+                    <!-- YouTube -->
+                    <a href="#">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+                            <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#1a1a2e" stroke="none"/>
+                        </svg>
+                    </a>
+                    <!-- Twitter/X -->
+                    <a href="#">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+                        </svg>
+                    </a>
+                    <!-- Instagram -->
+                    <a href="#">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Explore Links -->
+            <div class="footer-explore">
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="#">Marketplace</a></li>
+                    <li><a href="#">Rankings</a></li>
+                    <li><a href="#">Connect a wallet</a></li>
+                </ul>
+            </div>
+
+            <!-- Footer Newsletter -->
+            <div class="footer-newsletter">
+                <h4>Join Our Weekly Digest</h4>
+                <p>Get exclusive promotions & updates straight to your inbox.</p>
+                <div class="footer-newsletter-form">
+                    <input type="email" placeholder="Enter your email here"/>
+                    <button>Subscribe</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© NFT Market. Use this template freely.</p>
+        </div>
+    </footer>
+
+    <!-- ===== COUNTDOWN TIMER SCRIPT ===== -->
+    <script>
+        // Countdown Timer
+        function updateCountdown() {
+            const now = new Date();
+            const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+            const diff = endOfDay - now;
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Floating Particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.width = (Math.random() * 4 + 2) + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+            particle.style.animationDelay = (Math.random() * 10) + 's';
+            particle.style.background = `rgba(${139 + Math.random()*50}, ${92 + Math.random()*50}, ${246}, ${Math.random()*0.3 + 0.1})`;
+            particlesContainer.appendChild(particle);
+        }
+    </script>
+</body>
+</html>
